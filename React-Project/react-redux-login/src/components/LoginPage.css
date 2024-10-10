@@ -1,0 +1,24 @@
+﻿.btn-black {
+    background-color: black;
+    color: white;
+}
+
+
+.btn-light {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+
+.move-right {
+    margin-left: 270px; 
+}
+
+/* Center the container for mobile view */
+@media (max-width: 768px) {
+    .move-right {
+        margin-left: 0; 
+        margin-right: 0; 
+    }
+}

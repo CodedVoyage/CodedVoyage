@@ -1,0 +1,144 @@
+[
+  {
+    "name": "username",
+    "label": "Username",
+    "type": "text",
+    "placeholder": "Enter your username",
+    "validation": {
+      "required": true,
+      "minLength": 3,
+      "maxLength": 15
+    }
+  },
+  {
+    "name": "email",
+    "label": "Email",
+    "type": "email",
+    "placeholder": "Enter your email",
+    "validation": {
+      "required": true
+    }
+  },
+  {
+    "name": "password",
+    "label": "Password",
+    "type": "password",
+    "placeholder": "Enter your password",
+    "validation": {
+      "required": true,
+      "minLength": 6
+    }
+  },
+  {
+    "name": "phone",
+    "label": "Phone Number",
+    "type": "tel",
+    "placeholder": "Enter your phone number",
+    "validation": {
+      "required": true,
+      "customValidation": {
+        "regex": "^\\d{10}$",
+        "message": "Must be exactly 10 digits"
+      }
+    }
+  },
+  {
+    "name": "age",
+    "label": "Age",
+    "type": "number",
+    "validation": {
+      "required": true,
+      "min": 18,
+      "max": 65
+    }
+  },
+  {
+    "name": "gender",
+    "label": "Gender",
+    "type": "radio",
+    "options": [
+      {
+        "label": "Male",
+        "value": "male"
+      },
+      {
+        "label": "Female",
+        "value": "female"
+      }
+    ],
+    "validation": {
+      "required": true
+    }
+  },
+  {
+    "name": "newsletter",
+    "label": "Newsletter Subscription",
+    "type": "checkbox",
+    "options": [
+      {
+        "label": "Subscribe to newsletter",
+        "value": "yes"
+      }
+    ]
+  },
+  {
+    "name": "country",
+    "label": "Country",
+    "type": "select",
+    "options": [
+      {
+        "label": "USA",
+        "value": "usa"
+      },
+      {
+        "label": "Canada",
+        "value": "canada"
+      }
+    ],
+    "validation": {
+      "required": true
+    }
+  },
+  {
+    "name": "hobbies",
+    "label": "Hobbies",
+    "type": "checkbox",
+    "options": [
+      {
+        "label": "Reading",
+        "value": "reading"
+      },
+      {
+        "label": "Traveling",
+        "value": "traveling"
+      },
+      {
+        "label": "Gaming",
+        "value": "gaming"
+      } ,
+      {
+        "label": "Eating",
+        "value": "Eating"
+      }
+    ]
+  },
+  {
+    "name": "city",
+    "label": "City",
+    "type": "autocomplete",
+    "options": [
+      {
+        "label": "New York",
+        "value": "new_york"
+      },
+      {
+        "label": "Los Angeles",
+        "value": "los_angeles"
+      },
+      {
+        "label": "Chicago",
+        "value": "chicago"
+      }
+    ]
+  }
+]
