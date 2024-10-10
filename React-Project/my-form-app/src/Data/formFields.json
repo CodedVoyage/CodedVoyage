@@ -1,5 +1,24 @@
 {
   "header": "User Registration Form",
+  "spacing": {
+    "padding": "16px",
+    "margin": "8px"
+  },
+  "box": {
+    "padding": "16px",
+    "borderRadius": "8px",
+    "boxShadow": "0 4px 8px rgba(0, 0, 0, 0.1)",
+    "backgroundColor": "white"
+  },
+  "typography": {
+    "textAlign": "center",
+    "fontSize": {
+      "xs": "2rem",
+      "sm": "2.5rem"
+    },
+    "fontWeight": "bold",
+    "color": "#333"
+  },
   "fields": [
     {
       "name": "username",
@@ -10,6 +29,13 @@
         "required": true,
         "minLength": 3,
         "maxLength": 15
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
       }
     },
     {
@@ -19,6 +45,13 @@
       "placeholder": "Enter your email",
       "validation": {
         "required": true
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
       }
     },
     {
@@ -29,6 +62,13 @@
       "validation": {
         "required": true,
         "minLength": 6
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
       }
     },
     {
@@ -42,6 +82,13 @@
           "regex": "^\\d{10}$",
           "message": "Must be exactly 10 digits"
         }
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
       }
     },
     {
@@ -52,6 +99,13 @@
         "required": true,
         "min": 18,
         "max": 65
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
       }
     },
     {
@@ -70,6 +124,13 @@
       ],
       "validation": {
         "required": true
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
       }
     },
     {
@@ -81,24 +142,13 @@
           "label": "Subscribe to newsletter",
           "value": "yes"
         }
-      ]
-    },
-    {
-      "name": "country",
-      "label": "Country",
-      "type": "select",
-      "options": [
-        {
-          "label": "USA",
-          "value": "usa"
-        },
-        {
-          "label": "Canada",
-          "value": "canada"
-        }
       ],
-      "validation": {
-        "required": true
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
       }
     },
     {
@@ -120,9 +170,41 @@
         },
         {
           "label": "Eating",
-          "value": "Eating"
+          "value": "eating"
         }
-      ]
+      ],
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
+    },
+    {
+      "name": "country",
+      "label": "Country",
+      "type": "select",
+      "options": [
+        {
+          "label": "USA",
+          "value": "usa"
+        },
+        {
+          "label": "Canada",
+          "value": "canada"
+        }
+      ],
+      "validation": {
+        "required": true
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
     },
     {
       "name": "city",
@@ -141,7 +223,22 @@
           "label": "Chicago",
           "value": "chicago"
         }
-      ]
+      ],
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
     }
-  ]
+  ],
+  "submitButton": {
+    "padding": "20px",
+    "fontSize": "1.5rem",
+    "width": {
+      "xs": "100%",
+      "sm": "auto"
+    }
+  }
 }

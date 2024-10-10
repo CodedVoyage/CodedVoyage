@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Button, Box, Typography } from "@mui/material";
+import { Button, Typography, Grid, Box } from "@mui/material";
 
 import formData from "../src/Data/formFields.json";
+import styles from "../src/Data/styles.json";
 import Text from "../src/Fields/TextField/Text";
 import Radio from "../src/Fields/Radio/Radio";
 import Checkbox from "../src/Fields/Checkbox/Checkbox";
@@ -17,6 +18,7 @@ interface FormField {
     placeholder?: string;
     validation?: any;
     options?: { label: string; value: string }[];
+    gridProps?: any;
 }
 
 interface FormSchema {
@@ -32,7 +34,7 @@ const Form: React.FC = () => {
     }, []);
 
     const initialValues = formSchema.fields.reduce((acc, field) => {
-        acc[field.name] = field.type === "checkbox" ? false : ""; 
+        acc[field.name] = field.type === "checkbox" ? [] : "";
         return acc;
     }, {} as Record<string, any>);
 
@@ -68,7 +70,6 @@ const Form: React.FC = () => {
                     fieldValidation = Yup.number();
                 }
 
-                
                 if (rules.required) {
                     fieldValidation = fieldValidation.required(rules.required);
                 }
@@ -134,79 +135,82 @@ const Form: React.FC = () => {
     };
 
     return (
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-            {({ handleSubmit }) => (
-                <form onSubmit={handleSubmit}>
+        <Box sx={styles.box}>
+            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+                {({ handleSubmit }) => (
+                    <form onSubmit={handleSubmit}>
+                        <Typography variant="h4" gutterBottom sx={styles.typography}>
+                            {formSchema.header}
+                        </Typography>
 
-                    <Typography variant="h4" gutterBottom>
-                        {formSchema.header}
-                    </Typography>
+                        <Grid container spacing={2}>
+                            {formSchema.fields.map((field, index) => {
+                                const isCheckbox = field.type === "checkbox";
+                                const isRadio = field.type === "radio";
+                                const gridProps = field.gridProps || {};
 
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                        {formSchema.fields.map((field) => {
-                            switch (field.type) {
-                                case "text":
-                                case "email":
-                                case "password":
-                                case "tel":
-                                case "number":
+                                if (isCheckbox || isRadio) {
                                     return (
-                                        <Text
-                                            key={field.name}
-                                            name={field.name}
-                                            label={field.label}
-                                            type={field.type}
-                                            placeholder={field.placeholder}
-                                        />
+                                        <Grid item xs={12} {...gridProps} key={field.name}>
+                                            <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
+                                                {isRadio && (
+                                                    <Radio
+                                                        name={field.name}
+                                                        label={field.label}
+                                                        options={field.options || []}
+                                                    />
+                                                )}
+                                                {isCheckbox && (
+                                                    <Checkbox
+                                                        name={field.name}
+                                                        label={field.label}
+                                                        options={field.options || []}
+                                                    />
+                                                )}
+                                            </Box>
+                                        </Grid>
                                     );
-                                case "radio":
-                                    return (
-                                        <Radio
-                                            key={field.name}
-                                            name={field.name}
-                                            label={field.label}
-                                            options={field.options || []}
-                                        />
-                                    );
-                                case "checkbox":
-                                    return (
-                                        <Checkbox
-                                            key={field.name}
-                                            name={field.name}
-                                            label={field.label}
-                                            options={field.options || []}
-                                        />
-                                    );
-                                case "select":
-                                    return (
-                                        <Select
-                                            key={field.name}
-                                            name={field.name}
-                                            label={field.label}
-                                            options={field.options || []}
-                                        />
-                                    );
-                                case "autocomplete":
-                                    return (
-                                        <CustomAutocomplete
-                                            key={field.name}
-                                            name={field.name}
-                                            label={field.label}
-                                            options={field.options || []}
-                                        />
-                                    );
-                                default:
-                                    return null;
-                            }
-                        })}
-                    </Box>
+                                }
 
-                    <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-                        Submit
-                    </Button>
-                </form>
-            )}
-        </Formik>
+                                return (
+                                    <Grid item xs={12} {...gridProps} key={field.name}>
+                                        {field.type === "text" || field.type === "email" || field.type === "password" || field.type === "tel" || field.type === "number" ? (
+                                            <Text
+                                                name={field.name}
+                                                label={field.label}
+                                                type={field.type}
+                                                placeholder={field.placeholder}
+                                                sx={styles.textField} 
+                                            />
+                                        ) : field.type === "select" ? (
+                                            <Select
+                                                name={field.name}
+                                                label={field.label}
+                                                options={field.options || []}
+                                                sx={styles.select} 
+                                            />
+                                        ) : field.type === "autocomplete" ? (
+                                            <CustomAutocomplete
+                                                name={field.name}
+                                                label={field.label}
+                                                options={field.options || []}
+                                                sx={styles.autocomplete} 
+                                            />
+                                        ) : null}
+                                    </Grid>
+                                );
+                            })}
+                        </Grid>
+
+                        <Box sx={{ display: 'flex', justifyContent: 'left', mt: 2 }}>
+                            <Button type="submit" variant="contained" sx={styles.button}>
+                                Submit
+                            </Button>
+                        </Box>
+                    </form>
+                )}
+            </Formik>
+        </Box>
     );
 };
 

@@ -1,0 +1,41 @@
+{
+  "box": {
+    "backgroundColor": "white",
+    "padding": "16px",
+    "borderRadius": "8px",
+    "boxShadow": "0 4px 8px rgba(0, 0, 0, 0.1)"
+  },
+  "typography": {
+    "fontWeight": "bold",
+    "color": "#333",
+    "textAlign": "center",
+    "fontSize": {
+      "xs": "2rem",
+      "sm": "2.5rem"
+    }
+  },
+  "button": {
+    "backgroundColor": "#6200ea",
+    "color": "#fff",
+    "padding": "10px 20px",
+    "width": {
+      "xs": "100%",
+      "sm": "auto"
+    }
+  },
+  "textField": {
+    "marginBottom": "16px"
+  },
+  "radio": {
+    "marginRight": "10px"
+  },
+  "checkbox": {
+    "marginRight": "10px"
+  },
+  "select": {
+    "marginBottom": "16px"
+  },
+  "autocomplete": {
+    "marginBottom": "16px"
+  }
+}
