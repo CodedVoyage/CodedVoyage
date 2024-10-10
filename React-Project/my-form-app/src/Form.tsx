@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Button, Box } from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 
-import fieldsData from "../src/Data/formFields.json";
+import formData from "../src/Data/formFields.json";
 import Text from "../src/Fields/TextField/Text";
 import Radio from "../src/Fields/Radio/Radio";
 import Checkbox from "../src/Fields/Checkbox/Checkbox";
@@ -19,20 +19,25 @@ interface FormField {
     options?: { label: string; value: string }[];
 }
 
+interface FormSchema {
+    header: string;
+    fields: FormField[];
+}
+
 const Form: React.FC = () => {
-    const [fields, setFields] = useState<FormField[]>([]);
+    const [formSchema, setFormSchema] = useState<FormSchema>({ header: "", fields: [] });
 
     useEffect(() => {
-        setFields(fieldsData);
+        setFormSchema(formData);
     }, []);
 
-    const initialValues = fields.reduce((acc, field) => {
-        acc[field.name] = field.type === "checkbox" ? false : ""; // Initialize checkboxes as false
+    const initialValues = formSchema.fields.reduce((acc, field) => {
+        acc[field.name] = field.type === "checkbox" ? false : ""; 
         return acc;
     }, {} as Record<string, any>);
 
     const validationSchema = Yup.object().shape(
-        fields.reduce((acc, field) => {
+        formSchema.fields.reduce((acc, field) => {
             if (field.validation) {
                 const rules: any = {};
                 if (field.validation.required) {
@@ -63,21 +68,33 @@ const Form: React.FC = () => {
                     fieldValidation = Yup.number();
                 }
 
-                // Add validations
+                
                 if (rules.required) {
                     fieldValidation = fieldValidation.required(rules.required);
                 }
                 if (field.validation.minLength) {
-                    fieldValidation = fieldValidation.min(field.validation.minLength, `${field.label} must be at least ${field.validation.minLength} characters`);
+                    fieldValidation = fieldValidation.min(
+                        field.validation.minLength,
+                        `${field.label} must be at least ${field.validation.minLength} characters`
+                    );
                 }
                 if (field.validation.maxLength) {
-                    fieldValidation = fieldValidation.max(field.validation.maxLength, `${field.label} must be at most ${field.validation.maxLength} characters`);
+                    fieldValidation = fieldValidation.max(
+                        field.validation.maxLength,
+                        `${field.label} must be at most ${field.validation.maxLength} characters`
+                    );
                 }
                 if (field.validation.min) {
-                    fieldValidation = fieldValidation.min(field.validation.min, `${field.label} must be at least ${field.validation.min}`);
+                    fieldValidation = fieldValidation.min(
+                        field.validation.min,
+                        `${field.label} must be at least ${field.validation.min}`
+                    );
                 }
                 if (field.validation.max) {
-                    fieldValidation = fieldValidation.max(field.validation.max, `${field.label} must be at most ${field.validation.max}`);
+                    fieldValidation = fieldValidation.max(
+                        field.validation.max,
+                        `${field.label} must be at most ${field.validation.max}`
+                    );
                 }
                 if (field.validation.customValidation) {
                     fieldValidation = fieldValidation.matches(rules.matches.value, rules.matches.message);
@@ -120,8 +137,13 @@ const Form: React.FC = () => {
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
             {({ handleSubmit }) => (
                 <form onSubmit={handleSubmit}>
+
+                    <Typography variant="h4" gutterBottom>
+                        {formSchema.header}
+                    </Typography>
+
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                        {fields.map((field) => {
+                        {formSchema.fields.map((field) => {
                             switch (field.type) {
                                 case "text":
                                 case "email":
@@ -177,8 +199,11 @@ const Form: React.FC = () => {
                                     return null;
                             }
                         })}
-                        <Button type="submit" variant="contained">Submit</Button>
                     </Box>
+
+                    <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+                        Submit
+                    </Button>
                 </form>
             )}
         </Formik>
