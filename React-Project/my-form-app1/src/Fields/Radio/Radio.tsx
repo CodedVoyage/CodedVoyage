@@ -1,5 +1,5 @@
 import React from 'react';
-import { RadioGroup, FormControl, FormControlLabel, FormLabel, Radio as MuiRadio } from '@mui/material';
+import { RadioGroup, FormControl, FormControlLabel, FormLabel, Radio as MuiRadio, Box } from '@mui/material';
 import { useFormikContext } from 'formik';
 
 interface RadioProps {
@@ -9,14 +9,13 @@ interface RadioProps {
 }
 
 const CustomRadio: React.FC<RadioProps> = ({ name, label, options }) => {
-    const { getFieldProps, touched, errors, values } = useFormikContext<any>(); // Access formik context
+    const { getFieldProps, touched, errors } = useFormikContext<any>();
 
     return (
         <FormControl>
             <FormLabel>{label}</FormLabel>
             <RadioGroup
-                {...getFieldProps(name)} // Bind Formik's field props to the radio group
-                value={values[name]} // Set the selected value based on Formik's current value for this field
+                {...getFieldProps(name)}
                 sx={{
                     display: 'flex',
                     flexDirection: { xs: 'column', sm: 'row' }, // Column on mobile, row on larger screens

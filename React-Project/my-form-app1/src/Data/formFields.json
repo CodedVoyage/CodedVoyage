@@ -1,0 +1,244 @@
+{
+  "header": "User Registration Form",
+  "spacing": {
+    "padding": "16px",
+    "margin": "8px"
+  },
+  "box": {
+    "padding": "16px",
+    "borderRadius": "8px",
+    "boxShadow": "0 4px 8px rgba(0, 0, 0, 0.1)",
+    "backgroundColor": "white"
+  },
+  "typography": {
+    "textAlign": "center",
+    "fontSize": {
+      "xs": "2rem",
+      "sm": "2.5rem"
+    },
+    "fontWeight": "bold",
+    "color": "#333"
+  },
+  "fields": [
+    {
+      "name": "username",
+      "label": "Username",
+      "type": "text",
+      "placeholder": "Enter your username",
+      "validation": {
+        "required": true,
+        "minLength": 3,
+        "maxLength": 15
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
+    },
+    {
+      "name": "email",
+      "label": "Email",
+      "type": "email",
+      "placeholder": "Enter your email",
+      "validation": {
+        "required": true
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
+    },
+    {
+      "name": "password",
+      "label": "Password",
+      "type": "password",
+      "placeholder": "Enter your password",
+      "validation": {
+        "required": true,
+        "minLength": 6
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
+    },
+    {
+      "name": "phone",
+      "label": "Phone Number",
+      "type": "tel",
+      "placeholder": "Enter your phone number",
+      "validation": {
+        "required": true,
+        "customValidation": {
+          "regex": "^\\d{10}$",
+          "message": "Must be exactly 10 digits"
+        }
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
+    },
+    {
+      "name": "age",
+      "label": "Age",
+      "type": "number",
+      "validation": {
+        "required": true,
+        "min": 18,
+        "max": 65
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
+    },
+    {
+      "name": "gender",
+      "label": "Gender",
+      "type": "radio",
+      "options": [
+        {
+          "label": "Male",
+          "value": "male"
+        },
+        {
+          "label": "Female",
+          "value": "female"
+        }
+      ],
+      "validation": {
+        "required": true
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
+    },
+    {
+      "name": "newsletter",
+      "label": "Newsletter Subscription",
+      "type": "checkbox",
+      "options": [
+        {
+          "label": "Subscribe to newsletter",
+          "value": "yes"
+        }
+      ],
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
+    },
+    {
+      "name": "hobbies",
+      "label": "Hobbies",
+      "type": "checkbox",
+      "options": [
+        {
+          "label": "Reading",
+          "value": "reading"
+        },
+        {
+          "label": "Traveling",
+          "value": "traveling"
+        },
+        {
+          "label": "Gaming",
+          "value": "gaming"
+        },
+        {
+          "label": "Eating",
+          "value": "eating"
+        }
+      ],
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
+    },
+    {
+      "name": "country",
+      "label": "Country",
+      "type": "select",
+      "options": [
+        {
+          "label": "USA",
+          "value": "usa"
+        },
+        {
+          "label": "Canada",
+          "value": "canada"
+        }
+      ],
+      "validation": {
+        "required": true
+      },
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
+    },
+    {
+      "name": "city",
+      "label": "City",
+      "type": "autocomplete",
+      "options": [
+        {
+          "label": "New York",
+          "value": "new_york"
+        },
+        {
+          "label": "Los Angeles",
+          "value": "los_angeles"
+        },
+        {
+          "label": "Chicago",
+          "value": "chicago"
+        }
+      ],
+      "gridProps": {
+        "xs": 12,
+        "sm": 6
+      },
+      "spacing": {
+        "marginBottom": "16px"
+      }
+    }
+  ],
+  "submitButton": {
+    "padding": "20px",
+    "fontSize": "1.5rem",
+    "width": {
+      "xs": "100%",
+      "sm": "auto"
+    }
+  }
+}

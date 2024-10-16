@@ -2,81 +2,55 @@ import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Button, Typography, Grid, Box } from "@mui/material";
-import { useDispatch } from 'react-redux';
-import { submitForm } from "../src/redux/actions.js";
-import formData from "../src/Data/formFields.json";
-import styles from "../src/Data/styles.json";
-import Text from "../src/Fields/TextField/Text";
-import Radio from "../src/Fields/Radio/Radio";
-import Checkbox from "../src/Fields/Checkbox/Checkbox";
-import Select from "../src/Fields/Select/Select";
-import CustomAutocomplete from "../src/Fields/AutocompleteField/Autocomplete";
-import { useNavigate } from 'react-router-dom';
+import formData from "../Data/formFields.json";
+import styles from "../Data/styles.json";
+import Text from "../Fields/TextField/Text";
+import Radio from "../Fields/Radio/Radio";
+import Checkbox from "../Fields/Checkbox/Checkbox";
+import Select from "../Fields/Select/Select";
+import CustomAutocomplete from "../Fields/AutocompleteField/Autocomplete";
 
-interface FormField {
-    name: string;
-    label: string;
-    type: string;
-    placeholder?: string;
-    validation?: any;
-    options?: { label: string; value: string }[];
-    gridProps?: any;
-}
-
-interface FormSchema {
-    header: string;
-    fields: FormField[];
-}
-
-const Form: React.FC = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const [formSchema, setFormSchema] = useState<FormSchema>({ header: "", fields: [] });
+const UserProfile: React.FC = () => {
+    const [formSchema, setFormSchema] = useState(formData);
+    const [initialValues, setInitialValues] = useState<Record<string, any>>({});
     const [loading, setLoading] = useState(false);
+    const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {
-        setFormSchema(formData);
-    }, []);
-
-    const initialValues = formSchema.fields.reduce((acc, field) => {
-        acc[field.name] = field.type === "checkbox" ? [] : "";
-        return acc;
-    }, {} as Record<string, any>);
+        const storedFormData = localStorage.getItem("userProfile_defaultUser");
+        if (storedFormData) {
+            const parsedData = JSON.parse(storedFormData);
+            const populatedInitialValues = formSchema.fields.reduce((acc, field) => {
+                if (field.type === "checkbox") {
+                    acc[field.name] = parsedData[field.name] || [];
+                } else if (field.type === "radio") {
+                    acc[field.name] = parsedData[field.name] || "";
+                } else {
+                    acc[field.name] = parsedData[field.name] || "";
+                }
+                return acc;
+            }, {});
+            setInitialValues(populatedInitialValues);
+        } else {
+            setInitialValues(
+                formSchema.fields.reduce((acc, field) => {
+                    acc[field.name] = field.type === "checkbox" ? [] : "";
+                    return acc;
+                }, {})
+            );
+        }
+        setIsInitialized(true);
+    }, [formSchema.fields]);
 
     const validationSchema = Yup.object().shape(
         formSchema.fields.reduce((acc, field) => {
             if (field.validation) {
-                const rules: any = {};
-                if (field.validation.required) {
-                    rules.required = `${field.label} is required`;
-                }
-                if (field.validation.minLength) {
-                    rules.minLength = field.validation.minLength;
-                }
-                if (field.validation.maxLength) {
-                    rules.maxLength = field.validation.maxLength;
-                }
-                if (field.validation.min) {
-                    rules.min = field.validation.min;
-                }
-                if (field.validation.max) {
-                    rules.max = field.validation.max;
-                }
-                if (field.validation.customValidation) {
-                    rules.matches = {
-                        value: new RegExp(field.validation.customValidation.regex),
-                        message: field.validation.customValidation.message,
-                    };
-                }
-
                 let fieldValidation = Yup.string();
-
                 if (field.type === "number") {
                     fieldValidation = Yup.number();
                 }
-
-                if (rules.required) {
-                    fieldValidation = fieldValidation.required(rules.required);
+                if (field.validation.required) {
+                    fieldValidation = fieldValidation.required(`${field.label} is required`);
                 }
                 if (field.validation.minLength) {
                     fieldValidation = fieldValidation.min(
@@ -103,13 +77,15 @@ const Form: React.FC = () => {
                     );
                 }
                 if (field.validation.customValidation) {
-                    fieldValidation = fieldValidation.matches(rules.matches.value, rules.matches.message);
+                    fieldValidation = fieldValidation.matches(
+                        new RegExp(field.validation.customValidation.regex),
+                        field.validation.customValidation.message
+                    );
                 }
-
                 acc[field.name] = fieldValidation;
             }
             return acc;
-        }, {} as Record<string, any>)
+        }, {})
     );
 
     const handleSubmit = async (values: any) => {
@@ -120,52 +96,39 @@ const Form: React.FC = () => {
                     acc[key] = values[key];
                 }
                 return acc;
-            }, {} as Record<string, any>);
-
-            const userId = new Date().getTime().toString();
-            localStorage.setItem(userId, JSON.stringify({ ...cleanValues, id: userId }));
-            dispatch(submitForm(cleanValues));
-
-            const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(cleanValues),
-            });
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-
-            const responseData = await response.json();
-            console.log("Response from API:", responseData);
-            alert("Registration successful! You can now log in.");
-            navigate('/login');
-
+            }, {});
+            localStorage.setItem("userProfile_defaultUser", JSON.stringify(cleanValues));
+            alert("Profile updated successfully!");
         } catch (error) {
-            console.error("Error submitting form:", error);
-            alert("Error submitting form!");
+            console.error("Error updating profile:", error);
+            alert("Error updating profile!");
         } finally {
             setLoading(false);
         }
     };
 
+    if (!isInitialized) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <Box sx={styles.box}>
-            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+                enableReinitialize
+            >
                 {({ handleSubmit, isValid, dirty }) => (
                     <form onSubmit={handleSubmit}>
                         <Typography variant="h4" gutterBottom sx={styles.typography}>
-                            {formSchema.header}
+                            Update Profile
                         </Typography>
-
                         <Grid container spacing={2}>
-                            {formSchema.fields.map((field, index) => {
+                            {formSchema.fields.map((field) => {
                                 const isCheckbox = field.type === "checkbox";
                                 const isRadio = field.type === "radio";
                                 const gridProps = field.gridProps || {};
-
                                 if (isCheckbox || isRadio) {
                                     return (
                                         <Grid item xs={12} {...gridProps} key={field.name}>
@@ -188,7 +151,6 @@ const Form: React.FC = () => {
                                         </Grid>
                                     );
                                 }
-
                                 return (
                                     <Grid item xs={12} {...gridProps} key={field.name}>
                                         {field.type === "text" || field.type === "email" || field.type === "password" || field.type === "tel" || field.type === "number" ? (
@@ -218,7 +180,6 @@ const Form: React.FC = () => {
                                 );
                             })}
                         </Grid>
-
                         <Box sx={{ display: 'flex', justifyContent: 'left', mt: 2 }}>
                             <Button
                                 type="submit"
@@ -226,7 +187,7 @@ const Form: React.FC = () => {
                                 sx={{ ...styles.button, marginRight: 2 }}
                                 disabled={!(isValid && dirty) || loading}
                             >
-                                {loading ? 'Submitting...' : 'Submit'}
+                                {loading ? 'Updating...' : 'Update Profile'}
                             </Button>
                         </Box>
                     </form>
@@ -236,4 +197,4 @@ const Form: React.FC = () => {
     );
 };
 
-export default Form;
+export default UserProfile;
