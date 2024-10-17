@@ -2,9 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\Data",
-    "\\src\\redux"
+    "\\src\\Fields\\AutocompleteField",
+    "\\src\\Fields\\Radio",
+    "\\src\\redux",
+    "\\src\\redux\\actions",
+    "\\src\\redux\\reducers"
   ],
-  "SelectedNode": "\\public",
+  "SelectedNode": "\\src\\vite-env.d.ts",
   "PreviewInSolutionExplorer": false
 }

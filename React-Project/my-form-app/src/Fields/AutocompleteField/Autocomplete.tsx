@@ -15,14 +15,19 @@ interface CustomAutocompleteProps {
 }
 
 const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({ name, options, label }) => {
-    const {setFieldValue} = useFormikContext();
-        
+    const { values, setFieldValue } = useFormikContext<any>();
+
+    
+    const selectedOption = options.find(option => option.value === values[name]);
+
     return (
         <Autocomplete
             options={options}
-            onChange={(value) => {
-                setFieldValue(name, value);
+            value={selectedOption || null}
+            onChange={(_, newValue) => {
+                setFieldValue(name, newValue ? newValue.value : "");
             }}
+            getOptionLabel={(option) => option.label}
             renderInput={(params) => (
                 <TextField
                     {...params}
