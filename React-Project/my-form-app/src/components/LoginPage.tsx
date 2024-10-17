@@ -11,11 +11,13 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (!username || !password) {
             setError('Username and Password are required');
             return;
@@ -27,6 +29,8 @@ const LoginPage = () => {
             expiresInMins: 30,
         };
 
+        setLoading(true);
+
         try {
             const userData = await dispatch(login(credentials));
             setError('');
@@ -36,9 +40,11 @@ const LoginPage = () => {
                 dispatch({ type: 'SET_USER_DETAILS', payload: { firstName, lastName } });
             }
 
-            navigate('/profile');
+            navigate('/Dashboard');
         } catch (error) {
             setError('Login failed. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -94,7 +100,7 @@ const LoginPage = () => {
                                 />
                             </div>
                             <div className="mb-3 position-relative">
-                                <label htmlFor="password" className="form-label" style={{ color: '#fff' }}>Password</label>
+                                <label htmlFor="password" className="form-label">Password</label>
                                 <input
                                     type={passwordVisible ? 'text' : 'password'}
                                     className="form-control"
@@ -103,7 +109,6 @@ const LoginPage = () => {
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Enter your password"
                                     required
-                                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)', color: '#000' }}
                                 />
                                 <FontAwesomeIcon
                                     icon={passwordVisible ? faEyeSlash : faEye}
@@ -137,8 +142,13 @@ const LoginPage = () => {
                             <button
                                 type="submit"
                                 className="btn btn-dark w-100"
+                                disabled={loading}
                             >
-                                Log in
+                                {loading ? (
+                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                ) : (
+                                    'Log in'
+                                )}
                             </button>
                             {error && <p className="text-danger mt-3">{error}</p>}
                         </form>

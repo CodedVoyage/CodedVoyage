@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Button, Typography, Grid, Box } from "@mui/material";
@@ -9,29 +10,48 @@ import Radio from "../Fields/Radio/Radio";
 import Checkbox from "../Fields/Checkbox/Checkbox";
 import Select from "../Fields/Select/Select";
 import CustomAutocomplete from "../Fields/AutocompleteField/Autocomplete";
+import { RootState } from "../redux/store";
 
 const UserProfile: React.FC = () => {
     const [formSchema, setFormSchema] = useState(formData);
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
     const [loading, setLoading] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
+    const { username } = useSelector((state: RootState) => state.user);
+    console.log("Username from Redux store:", username);
 
     useEffect(() => {
-        const storedFormData = localStorage.getItem("userProfile_defaultUser");
+        const storedFormData = localStorage.getItem("registrations");
         if (storedFormData) {
             const parsedData = JSON.parse(storedFormData);
-            const populatedInitialValues = formSchema.fields.reduce((acc, field) => {
-                if (field.type === "checkbox") {
-                    acc[field.name] = parsedData[field.name] || [];
-                } else if (field.type === "radio") {
-                    acc[field.name] = parsedData[field.name] || "";
-                } else {
-                    acc[field.name] = parsedData[field.name] || "";
-                }
-                return acc;
-            }, {});
-            setInitialValues(populatedInitialValues);
+            console.log("Stored user data:", parsedData);
+
+            const user = parsedData.find((user: any) => user.username === username);
+            if (user) {
+                const populatedInitialValues = formSchema.fields.reduce((acc, field) => {
+                    if (field.type === "checkbox") {
+                        acc[field.name] = user[field.name] || [];
+                    } else if (field.type === "radio") {
+                        acc[field.name] = user[field.name] || "";
+                    } else {
+                        acc[field.name] = user[field.name] || "";
+                    }
+                    return acc;
+                }, {});
+
+                console.log("Populated initial values:", populatedInitialValues);
+                setInitialValues(populatedInitialValues);
+            } else {
+                console.log("No user found for the given username.");
+                setInitialValues(
+                    formSchema.fields.reduce((acc, field) => {
+                        acc[field.name] = field.type === "checkbox" ? [] : "";
+                        return acc;
+                    }, {})
+                );
+            }
         } else {
+            console.log("No registrations found in local storage.");
             setInitialValues(
                 formSchema.fields.reduce((acc, field) => {
                     acc[field.name] = field.type === "checkbox" ? [] : "";
@@ -40,7 +60,7 @@ const UserProfile: React.FC = () => {
             );
         }
         setIsInitialized(true);
-    }, [formSchema.fields]);
+    }, [formSchema.fields, username]);
 
     const validationSchema = Yup.object().shape(
         formSchema.fields.reduce((acc, field) => {
@@ -97,7 +117,14 @@ const UserProfile: React.FC = () => {
                 }
                 return acc;
             }, {});
-            localStorage.setItem("userProfile_defaultUser", JSON.stringify(cleanValues));
+            const storedData = localStorage.getItem("registrations");
+            if (storedData) {
+                const users = JSON.parse(storedData);
+                const updatedUsers = users.map(user =>
+                    user.username === username ? { ...user, ...cleanValues } : user
+                );
+                localStorage.setItem("registrations", JSON.stringify(updatedUsers));
+            }
             alert("Profile updated successfully!");
         } catch (error) {
             console.error("Error updating profile:", error);

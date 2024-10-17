@@ -115,7 +115,7 @@ const Form: React.FC = () => {
     const handleSubmit = async (values: any) => {
         setLoading(true);
         try {
-            console.log("Form values submitted:", values); // Log all form values here
+            console.log("Form values submitted:", values);
 
             const cleanValues = Object.keys(values).reduce((acc, key) => {
                 if (typeof values[key] === "string" || typeof values[key] === "number" || Array.isArray(values[key])) {
@@ -124,23 +124,13 @@ const Form: React.FC = () => {
                 return acc;
             }, {} as Record<string, any>);
 
-            // Store the username correctly
-            const username = cleanValues.username || "default_username"; // Set default if username is empty
+            const username = cleanValues.username || "default_username";
 
-            // Log cleanValues to ensure the username is set correctly
             console.log("Clean values before storing:", cleanValues);
-
-            // Retrieve existing registrations from local storage
             const existingRegistrations = JSON.parse(localStorage.getItem("registrations") || "[]");
-
-            // Create a unique user ID
             const userId = new Date().getTime().toString();
             const newRegistration = { ...cleanValues, id: userId };
-
-            // Add the new registration to the existing ones
             existingRegistrations.push(newRegistration);
-
-            // Store the updated registrations back to local storage
             localStorage.setItem("registrations", JSON.stringify(existingRegistrations));
 
             dispatch(submitForm(cleanValues));

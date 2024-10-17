@@ -1,12 +1,13 @@
 import { Dispatch } from 'redux';
-import { LOGIN_SUCCESS, LOGIN_FAILURE, AuthActionType } from './actionTypes';
+import { LOGIN_SUCCESS, LOGIN_FAILURE, AuthActions } from './actionTypes';
 
 interface LoginSuccessAction {
     type: typeof LOGIN_SUCCESS;
     payload: {
-        id: number; 
+        id: number;
         firstName: string;
         lastName: string;
+        username: string;  
     };
 }
 
@@ -48,6 +49,7 @@ export const login = (credentials: Credentials) => async (dispatch: Dispatch<Aut
                 id: data.id,
                 firstName: data.firstName,
                 lastName: data.lastName,
+                username: data.username,  
             },
         });
     } catch (error) {

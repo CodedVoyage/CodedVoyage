@@ -5,6 +5,7 @@ const initialState: UserState = {
     id: null,
     firstName: '',
     lastName: '',
+    username: '',
     error: null,
 };
 
@@ -13,9 +14,10 @@ const userReducer = (state = initialState, action: any): UserState => {
         case LOGIN_SUCCESS:
             return {
                 ...state,
-                id: action.payload.id, 
+                id: action.payload.id,
                 firstName: action.payload.firstName,
                 lastName: action.payload.lastName,
+                username: action.payload.username, 
                 error: null,
             };
         case LOGIN_FAILURE:
