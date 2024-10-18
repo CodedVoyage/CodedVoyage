@@ -10,7 +10,7 @@ import Radio from "../Fields/Radio/Radio";
 import Checkbox from "../Fields/Checkbox/Checkbox";
 import Select from "../Fields/Select/Select";
 import CustomAutocomplete from "../Fields/AutocompleteField/Autocomplete";
-import { RootState } from "../redux/store";
+import { RootState } from "../redux/reducers/rootReducer";
 
 const UserProfile: React.FC = () => {
     const [formSchema, setFormSchema] = useState(formData);

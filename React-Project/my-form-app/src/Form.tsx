@@ -112,6 +112,53 @@ const Form: React.FC = () => {
         }, {} as Record<string, any>)
     );
 
+    //const handleSubmit = async (values: any) => {
+    //    setLoading(true);
+    //    try {
+    //        console.log("Form values submitted:", values);
+
+    //        const cleanValues = Object.keys(values).reduce((acc, key) => {
+    //            if (typeof values[key] === "string" || typeof values[key] === "number" || Array.isArray(values[key])) {
+    //                acc[key] = values[key];
+    //            }
+    //            return acc;
+    //        }, {} as Record<string, any>);
+
+    //        const username = cleanValues.username || "default_username";
+
+    //        console.log("Clean values before storing:", cleanValues);
+    //        const existingRegistrations = JSON.parse(localStorage.getItem("registrations") || "[]");
+    //        const userId = new Date().getTime().toString();
+    //        const newRegistration = { ...cleanValues, id: userId };
+    //        existingRegistrations.push(newRegistration);
+    //        localStorage.setItem("registrations", JSON.stringify(existingRegistrations));
+
+    //        dispatch(submitForm(cleanValues));
+
+    //        const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+    //            method: "POST",
+    //            headers: {
+    //                "Content-Type": "application/json",
+    //            },
+    //            body: JSON.stringify(cleanValues),
+    //        });
+
+    //        if (!response.ok) {
+    //            throw new Error("Network response was not ok");
+    //        }
+
+    //        const responseData = await response.json();
+    //        console.log("Response from API:", responseData);
+    //        alert("Registration successful! You can now log in.");
+    //        navigate('/login');
+
+    //    } catch (error) {
+    //        console.error("Error submitting form:", error);
+    //        alert("Error submitting form!");
+    //    } finally {
+    //        setLoading(false);
+    //    }
+    //};
     const handleSubmit = async (values: any) => {
         setLoading(true);
         try {
@@ -125,8 +172,15 @@ const Form: React.FC = () => {
             }, {} as Record<string, any>);
 
             const username = cleanValues.username || "default_username";
+            const password = cleanValues.password || "default_password";
 
             console.log("Clean values before storing:", cleanValues);
+
+            // Store username and password separately in localStorage
+            const users = JSON.parse(localStorage.getItem("users") || "[]");
+            users.push({ username, password });
+            localStorage.setItem("users", JSON.stringify(users));
+
             const existingRegistrations = JSON.parse(localStorage.getItem("registrations") || "[]");
             const userId = new Date().getTime().toString();
             const newRegistration = { ...cleanValues, id: userId };
