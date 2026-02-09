@@ -189,10 +189,9 @@
         {
           "label": "USA",
           "value": "usa"
-        },
-        {
-          "label": "Canada",
-          "value": "canada"
+        },{
+          "label": "INDIA",
+          "value": "india"
         }
       ],
       "validation": {
